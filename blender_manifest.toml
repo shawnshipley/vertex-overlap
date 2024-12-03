@@ -1,0 +1,36 @@
+schema_version = "1.0.0"
+
+id = "vertex_overlap"
+version = "1.0.0"
+name = "Vertex Overlap"
+tagline = "Alerts you to overlapping vertices in real-time"
+maintainer = "Shawn Shipley <shawn.shipley@gmail.com>"
+type = "add-on"
+
+website = "https://github.com/shawnshipley/vertex-overlap"
+
+tags = ["3D View", "Mesh", "Modeling"]
+
+blender_version_min = "4.2.0"
+
+license = [
+  "SPDX:GPL-3.0-or-later",
+]
+
+copyright = [
+  "2024 Shawn Shipley",
+]
+
+platforms = ["windows-x64", "macos-arm64", "linux-x64"]
+
+[build]
+paths_exclude_pattern = [
+  "__pycache__/",
+  "/.git/",
+  "/*.zip",
+  "/images",
+  "/build",
+  "/output",
+  ".gitignore",
+  "/Releases",
+]
