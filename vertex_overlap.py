@@ -7,10 +7,10 @@ def check_overlapping_verts(context):
     if obj and obj.type == 'MESH' and obj.mode == 'EDIT':
         bm = bmesh.from_edit_mesh(obj.data)
         bm.verts.ensure_lookup_table()
-        
+
         overlap_count = 0
         visited = set()
-        
+
         for vert in bm.verts:
             if vert.is_valid:
                 pos = tuple(round(coord, 6) for coord in vert.co)
@@ -18,10 +18,16 @@ def check_overlapping_verts(context):
                     overlap_count += 1
                 else:
                     visited.add(pos)
-        
         context.scene.overlapping_verts = overlap_count
     else:
         context.scene.overlapping_verts = 0
+
+@persistent
+def check_mode_change(dummy):
+    context = bpy.context
+    if context.active_object and context.active_object.type == 'MESH':
+        if context.active_object.mode == 'EDIT':
+            check_overlapping_verts(context)
 
 class OverlapVertexCheckerPanel(bpy.types.Panel):
     bl_idname = "OBJECT_PT_overlap_vertex_checker"
@@ -67,17 +73,18 @@ class MergeOverlappingVertsOperator(bpy.types.Operator):
         check_overlapping_verts(context)
         return {'FINISHED'}
 
-@persistent
-def check_mode_change(dummy):
-    context = bpy.context
-    if context.active_object and context.active_object.type == 'MESH':
-        if context.active_object.mode == 'EDIT':
-            check_overlapping_verts(context)
+CLASSES =  [OverlapVertexCheckerPanel,
+            CheckOverlappingVertsOperator,
+            MergeOverlappingVertsOperator,
+            ]
 
 def register():
-    bpy.utils.register_class(OverlapVertexCheckerPanel)
-    bpy.utils.register_class(CheckOverlappingVertsOperator)
-    bpy.utils.register_class(MergeOverlappingVertsOperator)
+    for cls in CLASSES:
+        try:
+            bpy.utils.register_class(cls)
+        except:
+            print(f"{cls.__name__} already registred")
+
     bpy.types.Scene.overlap_threshold = bpy.props.FloatProperty(
         name="Overlap Threshold",
         description="Threshold distance for overlapping vertices",
@@ -85,16 +92,21 @@ def register():
         min=0.0,
         precision=4
     )
+
     bpy.types.Scene.overlapping_verts = bpy.props.IntProperty(
         name="Overlapping Vertices",
         default=0
     )
+
     bpy.app.handlers.depsgraph_update_post.append(check_mode_change)
 
 def unregister():
-    bpy.utils.unregister_class(OverlapVertexCheckerPanel)
-    bpy.utils.unregister_class(CheckOverlappingVertsOperator)
-    bpy.utils.unregister_class(MergeOverlappingVertsOperator)
+    for cls in reversed(CLASSES):
+        try:
+            bpy.utils.unregister_class(cls)
+        except RuntimeError:
+            pass
+
     del bpy.types.Scene.overlap_threshold
     del bpy.types.Scene.overlapping_verts
     bpy.app.handlers.depsgraph_update_post.remove(check_mode_change)
