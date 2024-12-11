@@ -115,7 +115,7 @@ def register():
     bpy.types.Scene.overlap_threshold = bpy.props.FloatProperty(
         name="Overlap Threshold",
         description="Threshold distance for overlapping vertices",
-        default=0.001,
+        default=0.0001,
         min=0.0,
         precision=4
     )
