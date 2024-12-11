@@ -1,17 +1,16 @@
 # Vertex Overlap
 
-A Blender N-panel add-on that alerts you to overlapping vertices in real-time.
+A Blender N-panel add-on that alerts you to overlapping vertices in real-time. Found under the `Edit` N-panel.
 
 ![image](images/logo.png)
 
 ## Features
 
-While you're in Edit mode, Vertex Overlap will:
--  Alert you to new overlapping vertices in real-time. Have you ever started, then canceled an extrusion? If you don't remember to immediately undo your last action, you will create overlapping vertices that aren't easy to spot until you start noticing weird rendering issues or you experience odd issues while editing your mesh.
-- Allow you to set a custom `Overlap Threshold` distance. If you only want to be alerted about overlapping vertices of a certain distance, you can specify a custom distance. The default is 0.001m.
-- Let you manually check for overlapping vertices but clicking the `Check Overlaps` button. You can click it to manually check for overlapping vertices in case you think the Overlapping Vertices count isn't updating in real-time.
-- Provides a convenient `Merge Vertices` button in the N-panel that will merge overlapping vertices by the configured `Overlap Threshold` distance. This is equivalent to `Selecting All` and then `Merging by Distance`. Now in a convenient single click.
-- Let you `Shift + Right-Click` on the `Overlap` N-panel and check `Pin`. This will pin Vertex Overlap to the top of your N-panel so you can always keep an eye on any overlapping vertices.
+-  Alerts you to new overlapping vertices in real-time. Disabled by default, but enabled with a simple checkbox. Have you ever started, then canceled an extrusion? If you don't remember to immediately undo your last action, you will create overlapping vertices that aren't easy to spot until you start noticing weird rendering issues or you experience odd issues while editing your mesh.
+- You to set a custom `Overlap Threshold` distance. If you only want to be alerted about overlapping vertices of a certain distance, you can specify a custom distance. The default is 0.0001m.
+- If real-time checking is disabled, you can manually check for overlapping vertices by clicking the `Check Overlaps` button at anytime while in Edit mode.
+- Provides a convenient `Merge Vertices` button that will merge overlapping vertices by the configured `Overlap Threshold` distance. This is equivalent to `Selecting All` and then `Merging by Distance`. Now in a convenient single click.
+- If you select multiple objects and tab to `Edit` mode, the `Overlapping Vertices` count will reflect the number of overlapping vertices in both mesh objects combined. If you have two objects, each with 2 overlapping vertices, and select both then tab to Edit mode, `Vertex Overlap` will show `4` total overlapping vertices.
 
 ## Screenshot
 ![](images/figure-1.png)
