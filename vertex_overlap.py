@@ -31,10 +31,13 @@ def check_overlapping_verts(context):
 @persistent
 def check_mode_change(dummy):
     context = bpy.context
-    if context.mode == 'EDIT_MESH' and context.selected_objects:
-        check_overlapping_verts(context)
-    else:
-        context.scene.overlapping_verts = 0
+    # Toggle
+    if context.scene.overlap_checking_enabled:
+    # Toggle
+        if context.mode == 'EDIT_MESH' and context.selected_objects:
+            check_overlapping_verts(context)
+        else:
+            context.scene.overlapping_verts = 0
 
 class OverlapVertexCheckerPanel(bpy.types.Panel):
     bl_idname = "OBJECT_PT_overlap_vertex_checker"
@@ -47,6 +50,10 @@ class OverlapVertexCheckerPanel(bpy.types.Panel):
         layout = self.layout
         scene = context.scene
         
+        row = layout.row()
+        status = "" if scene.overlap_checking_enabled else "(disabled)"
+        row.prop(scene, "overlap_checking_enabled", text=f"Real-time Checking {status}")
+
         row = layout.row()
         row.prop(scene, "overlap_threshold")
         
@@ -63,6 +70,13 @@ class CheckOverlappingVertsOperator(bpy.types.Operator):
     bl_idname = "object.check_overlapping_verts"
     bl_label = "Check for Overlaps"
     bl_options = {'REGISTER', 'UNDO'}
+    bl_description = "Check for overlapping vertices (only available in Edit Mode)"
+
+    @classmethod
+    def poll(cls, context):
+        return (context.active_object is not None and 
+                context.active_object.type == 'MESH' and 
+                context.active_object.mode == 'EDIT')
 
     def execute(self, context):
         check_overlapping_verts(context)
@@ -113,6 +127,13 @@ def register():
 
     bpy.app.handlers.depsgraph_update_post.append(check_mode_change)
 
+
+    bpy.types.Scene.overlap_checking_enabled = bpy.props.BoolProperty(
+            name="Enable Overlap Checking",
+            description="Toggle real-time checking of overlapping vertices",
+            default=False
+        )
+
 def unregister():
     for cls in reversed(CLASSES):
         try:
@@ -122,4 +143,5 @@ def unregister():
 
     del bpy.types.Scene.overlap_threshold
     del bpy.types.Scene.overlapping_verts
+    del bpy.types.Scene.overlap_checking_enabled
     bpy.app.handlers.depsgraph_update_post.remove(check_mode_change)

@@ -2,7 +2,7 @@ bl_info = {
     "name": "Vertex Overlap",
     "description": "Blender N-panel add-on that alerts you to overlapping vertices in real-time.",
     "author": "Shawn Shipley",
-    "version": (1, 0, 4),
+    "version": (1, 0, 5),
     "blender": (4, 2, 0),
     "category": "3D View",
     "doc_url": "https://github.com/shawnshipley/vertex-overlap",
