@@ -66,6 +66,12 @@ class MergeOverlappingVertsOperator(bpy.types.Operator):
     bl_idname = "object.merge_overlapping_verts"
     bl_label = "Merge Vertices"
 
+    @classmethod
+    def poll(cls, context):
+        return (context.active_object is not None and 
+                context.active_object.type == 'MESH' and 
+                context.active_object.mode == 'EDIT')
+
     def execute(self, context):
         bpy.ops.object.mode_set(mode='EDIT')
         bpy.ops.mesh.select_all(action='SELECT')
