@@ -40,3 +40,11 @@ Vertex Overlap will now show up in your N-panel as `Overlap`.
 
 ### Blender Extension store
 Coming soon to the Blender Extension store for an even easier install option.
+
+### Changelog
+- Added a checkbox to enable/disable real-time checking of overlapping vertices. Now you can leave real-time checking disabled, but still use the `Check Overlaps` button to manually check for overlapping vertices. Or you can enable real-time checking to be immediately alerted to overlapping vertices.
+- Moved Vertex Overlap to the `Edit` N-Panel instead of its own dedicated N-Panel to reduce clutter.
+- You can now select multiple objects, tab to edit mode, and Vertex Overlap will give you a count of all overlapping vertices for all objects.
+- Added polling to make sure the active object is of type `MESH`.
+- Removed supported platforms since the extension can be used by Windows, Linux, and Mac by default.
+- Changed default merge distance to 0.0001m.
