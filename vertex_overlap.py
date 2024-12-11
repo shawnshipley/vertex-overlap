@@ -3,8 +3,13 @@ import bmesh
 from bpy.app.handlers import persistent
 
 def check_overlapping_verts(context):
-    obj = context.active_object
-    if obj and obj.type == 'MESH' and obj.mode == 'EDIT':
+    total_overlaps = 0
+    
+    # Get all selected objects that are in Edit mode
+    selected_objects = [obj for obj in context.selected_objects 
+                       if obj.type == 'MESH' and obj.mode == 'EDIT']
+    
+    for obj in selected_objects:
         bm = bmesh.from_edit_mesh(obj.data)
         bm.verts.ensure_lookup_table()
 
@@ -18,16 +23,18 @@ def check_overlapping_verts(context):
                     overlap_count += 1
                 else:
                     visited.add(pos)
-        context.scene.overlapping_verts = overlap_count
-    else:
-        context.scene.overlapping_verts = 0
+                    
+        total_overlaps += overlap_count
+        
+    context.scene.overlapping_verts = total_overlaps
 
 @persistent
 def check_mode_change(dummy):
     context = bpy.context
-    if context.active_object and context.active_object.type == 'MESH':
-        if context.active_object.mode == 'EDIT':
-            check_overlapping_verts(context)
+    if context.mode == 'EDIT_MESH' and context.selected_objects:
+        check_overlapping_verts(context)
+    else:
+        context.scene.overlapping_verts = 0
 
 class OverlapVertexCheckerPanel(bpy.types.Panel):
     bl_idname = "OBJECT_PT_overlap_vertex_checker"
