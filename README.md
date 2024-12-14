@@ -25,9 +25,18 @@ Because Vertex Overlap is packaged as an Extension, it currently supports Blende
 
 ## Installation Options
 
+### Blender Extension store
+
+Now available directly from the Blender Extension repository.
+1. In Blender, go to `Edit` -> `Preferences`
+2. Click on `Get Extensions` -> Search for `Vertex Overlap` -> `Install`
+3. Done!
+
+![](images/figure-4.png)
+
 ### Install from Disk
 
-Vertex Overlap is available as an extension, which you can download from the [Releases](https://github.com/shawnshipley/vertex-overlap/releases) section of its [Github](https://github.com/shawnshipley/vertex-overlap) page. Just follow the steps below to manually install:
+Vertex Overlap can also be installed manually, which you can download from the [Releases](https://github.com/shawnshipley/vertex-overlap/releases) section of its [Github](https://github.com/shawnshipley/vertex-overlap) page. Just follow the steps below to install:
 1. Download the latest [release](https://github.com/shawnshipley/vertex-overlap/releases)
 2. In Blender, go to Edit -> Preferences
 3. Click on `Get Extensions`
@@ -35,10 +44,7 @@ Vertex Overlap is available as an extension, which you can download from the [Re
 ![](images/figure-3.png)
 5. Browse to the downloaded .zip file and select it to complete the installation.
 
-Vertex Overlap will now show up in your N-panel as `Overlap`.
-
-### Blender Extension store
-Coming soon to the Blender Extension store for an even easier install option.
+Vertex Overlap will now show up in the `Edit` N-panel as `Vertex Overlap`.
 
 ### Changelog
 - Added a checkbox to enable/disable real-time checking of overlapping vertices. Now you can leave real-time checking disabled, but still use the `Check Overlaps` button to manually check for overlapping vertices. Or you can enable real-time checking to be immediately alerted to overlapping vertices.
