@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "vertex_overlap"
-version = "1.0.6"
+version = "1.0.7"
 name = "Vertex Overlap"
 tagline = "Alerts you to overlapping vertices in real-time"
 maintainer = "Shawn Shipley <shawn.shipley@gmail.com>"
@@ -9,7 +9,7 @@ type = "add-on"
 
 website = "https://github.com/shawnshipley/vertex-overlap"
 
-tags = ["3D View", "Mesh", "Modeling"]
+tags = ["Mesh", "Modeling"]
 
 blender_version_min = "4.2.0"
 
