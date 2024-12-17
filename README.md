@@ -48,6 +48,9 @@ Vertex Overlap will now show up in the `Edit` N-panel as `Vertex Overlap`.
 
 ### Changelog
 
+#### 12/17/24 (v1.0.8)
+- Fixed overlap_threshold bug
+
 #### 12/17/24 (v1.0.7)
 - Removed 3D View tag
 - Stopped registering stray properties on Scene ID

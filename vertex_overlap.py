@@ -9,20 +9,28 @@ def check_overlapping_verts(context):
     selected_objects = [obj for obj in context.selected_objects 
                        if obj.type == 'MESH' and obj.mode == 'EDIT']
     
+    threshold = context.scene.vertex_overlap.overlap_threshold
+    
     for obj in selected_objects:
         bm = bmesh.from_edit_mesh(obj.data)
         bm.verts.ensure_lookup_table()
 
         overlap_count = 0
-        visited = set()
-
+        # Create a dictionary to store vertex positions
+        vert_positions = {}
+        
         for vert in bm.verts:
-            if vert.is_valid:
-                pos = tuple(round(coord, 6) for coord in vert.co)
-                if pos in visited:
-                    overlap_count += 1
-                else:
-                    visited.add(pos)
+            if not vert.is_valid:
+                continue
+                
+            # Round the coordinates based on threshold
+            # This ensures vertices within threshold distance are considered the same
+            pos = tuple(round(coord / threshold) for coord in vert.co)
+            
+            if pos in vert_positions:
+                overlap_count += 1
+            else:
+                vert_positions[pos] = True
                     
         total_overlaps += overlap_count
         
