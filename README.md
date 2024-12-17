@@ -47,6 +47,13 @@ Vertex Overlap can also be installed manually, which you can download from the [
 Vertex Overlap will now show up in the `Edit` N-panel as `Vertex Overlap`.
 
 ### Changelog
+
+#### 12/17/24 (v1.0.7)
+- Removed 3D View tag
+- Stopped registering stray properties on Scene ID
+
+#### 12/13/24 (v1.0.6)
+- Initial release to Blender Extensions platform.
 - Added a checkbox to enable/disable real-time checking of overlapping vertices. Now you can leave real-time checking disabled, but still use the `Check Overlaps` button to manually check for overlapping vertices. Or you can enable real-time checking to be immediately alerted to overlapping vertices.
 - Moved Vertex Overlap to the `Edit` N-Panel instead of its own dedicated N-Panel to reduce clutter.
 - You can now select multiple objects, tab to edit mode, and Vertex Overlap will give you a count of all overlapping vertices for all objects.
