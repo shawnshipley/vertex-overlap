@@ -68,6 +68,9 @@ class OverlapVertexCheckerPanel(bpy.types.Panel):
         
         row = layout.row()
         row.operator("object.check_overlapping_verts", text="Check Overlaps")
+
+        row = layout.row()
+        row.operator("object.show_overlapping_verts", text="Show Overlaps")
         
         row = layout.row()
         row.label(text=f"Overlapping Vertices: {props.overlapping_verts}")
@@ -129,10 +132,66 @@ class VertexOverlapProperties(bpy.types.PropertyGroup):
         default=False
     )
 
+class ShowOverlappingVertsOperator(bpy.types.Operator):
+    bl_idname = "object.show_overlapping_verts"
+    bl_label = "Show Overlaps"
+    bl_options = {'REGISTER', 'UNDO'}
+    bl_description = "Highlight overlapping vertices (only available in Edit Mode)"
+
+    @classmethod
+    def poll(cls, context):
+        return (context.active_object is not None and 
+                context.active_object.type == 'MESH' and 
+                context.active_object.mode == 'EDIT')
+
+    def execute(self, context):
+        # Deselect all vertices first
+        bpy.ops.mesh.select_all(action='DESELECT')
+        
+        # Get the active object
+        obj = context.active_object
+        bm = bmesh.from_edit_mesh(obj.data)
+        bm.verts.ensure_lookup_table()
+
+        # Get the overlap threshold
+        threshold = context.scene.vertex_overlap.overlap_threshold
+        
+        # Dictionary to track vertex positions
+        vert_positions = {}
+        overlapping_verts = []
+
+        # First pass: identify overlapping vertices
+        for vert in bm.verts:
+            if not vert.is_valid:
+                continue
+                
+            # Round the coordinates based on threshold
+            pos = tuple(round(coord / threshold) for coord in vert.co)
+            
+            if pos in vert_positions:
+                # We found an overlap
+                if pos not in overlapping_verts:
+                    overlapping_verts.append(pos)
+                vert.select = True
+            else:
+                vert_positions[pos] = vert
+
+        # Update the mesh
+        bmesh.update_edit_mesh(obj.data)
+        
+        # Report the number of overlapping vertices
+        if overlapping_verts:
+            self.report({'INFO'}, f"Highlighted {len(overlapping_verts)} overlapping vertices")
+        else:
+            self.report({'INFO'}, "No overlapping vertices found")
+        
+        return {'FINISHED'}
+
 CLASSES =  [VertexOverlapProperties,
             OverlapVertexCheckerPanel,
             CheckOverlappingVertsOperator,
             MergeOverlappingVertsOperator,
+            ShowOverlappingVertsOperator,
             ]
 
 def register():
