@@ -1,6 +1,6 @@
-import bpy
-import bmesh
-from bpy.app.handlers import persistent
+import bpy # type: ignore
+import bmesh # type: ignore
+from bpy.app.handlers import persistent # type: ignore
 
 def check_overlapping_verts(context):
     total_overlaps = 0
@@ -119,18 +119,18 @@ class VertexOverlapProperties(bpy.types.PropertyGroup):
         default=0.0001,
         min=0.0,
         precision=4
-    )
+    ) # type: ignore
     
     overlapping_verts: bpy.props.IntProperty(
         name="Overlapping Vertices",
         default=0
-    )
+    ) # type: ignore
     
     overlap_checking_enabled: bpy.props.BoolProperty(
         name="Enable Overlap Checking",
         description="Toggle real-time checking of overlapping vertices",
         default=False
-    )
+    ) # type: ignore
 
 class ShowOverlappingVertsOperator(bpy.types.Operator):
     bl_idname = "object.show_overlapping_verts"
