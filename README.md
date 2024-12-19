@@ -20,7 +20,7 @@ Figure 1 - Small compact N-panel with an option to quickly merge any overlapping
 
 ## Video
 ![](images/demonstration-2.gif)
-Figure 2 - You can see the `Overlapping Vertices` field update in real-time as I cancel three different extrusions.
+Figure 2 - You can see the `Overlapping Vertices` field update in real-time as I cancel three different extrusions. Then if you change to Vertex Selection mode, you can highlight which vertices are overlapping.
 
 ## Supported Blender Versions
 Because Vertex Overlap is packaged as an Extension, it currently supports Blender 4.2+ and newer.
