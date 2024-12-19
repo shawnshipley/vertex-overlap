@@ -98,6 +98,7 @@ class CheckOverlappingVertsOperator(bpy.types.Operator):
 class MergeOverlappingVertsOperator(bpy.types.Operator):
     bl_idname = "object.merge_overlapping_verts"
     bl_label = "Merge Vertices"
+    bl_description = "Merges by distance"
 
     @classmethod
     def poll(cls, context):
@@ -137,7 +138,7 @@ class ShowOverlappingVertsOperator(bpy.types.Operator):
     bl_idname = "object.show_overlapping_verts"
     bl_label = "Show Overlaps"
     bl_options = {'REGISTER', 'UNDO'}
-    bl_description = "Highlight overlapping vertices (only available in Edit Mode)"
+    bl_description = "Highlight overlapping vertices (must be in Vertex Selection Mode)"
 
     @classmethod
     def poll(cls, context):
