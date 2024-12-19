@@ -117,8 +117,8 @@ class VertexOverlapProperties(bpy.types.PropertyGroup):
         name="Overlap Threshold",
         description="Threshold distance for overlapping vertices",
         default=0.0001,
-        min=0.0000001,
-        soft_min=0.0000001,
+        min=0.000001,
+        soft_min=0.000001,
         precision=4
     ) # type: ignore
     
@@ -149,40 +149,54 @@ class ShowOverlappingVertsOperator(bpy.types.Operator):
         # Deselect all vertices first
         bpy.ops.mesh.select_all(action='DESELECT')
         
-        # Get the active object
-        obj = context.active_object
-        bm = bmesh.from_edit_mesh(obj.data)
-        bm.verts.ensure_lookup_table()
-
-        # Get the overlap threshold
-        threshold = context.scene.vertex_overlap.overlap_threshold
+        # Get all selected objects that are in Edit mode
+        selected_objects = [obj for obj in context.selected_objects 
+                          if obj.type == 'MESH' and obj.mode == 'EDIT']
         
-        # Dictionary to track vertex positions
+        threshold = context.scene.vertex_overlap.overlap_threshold
+        total_overlaps = 0
+        
+        # Dictionary to track vertex positions across all objects
         vert_positions = {}
-        overlapping_verts = []
 
-        # First pass: identify overlapping vertices
-        for vert in bm.verts:
-            if not vert.is_valid:
-                continue
+        # First pass: collect all vertex positions
+        for obj in selected_objects:
+            bm = bmesh.from_edit_mesh(obj.data)
+            bm.verts.ensure_lookup_table()
+
+            # Get world matrix for coordinate conversion
+            world_matrix = obj.matrix_world
+
+            for vert in bm.verts:
+                if not vert.is_valid:
+                    continue
+                    
+                # Convert vertex position to world space
+                world_pos = world_matrix @ vert.co
                 
-            # Round the coordinates based on threshold
-            pos = tuple(round(coord / threshold) for coord in vert.co)
-            
-            if pos in vert_positions:
-                # We found an overlap
-                if pos not in overlapping_verts:
-                    overlapping_verts.append(pos)
-                vert.select = True
-            else:
-                vert_positions[pos] = vert
+                # Round the coordinates based on threshold
+                pos = tuple(round(coord / threshold) for coord in world_pos)
+                
+                if pos in vert_positions:
+                    # We found an overlap
+                    vert.select = True
+                    total_overlaps += 1
+                    
+                    # Select the original vertex that was stored
+                    orig_obj, orig_idx = vert_positions[pos]
+                    orig_bm = bmesh.from_edit_mesh(orig_obj.data)
+                    orig_bm.verts.ensure_lookup_table()
+                    orig_bm.verts[orig_idx].select = True
+                    bmesh.update_edit_mesh(orig_obj.data)
+                else:
+                    vert_positions[pos] = (obj, vert.index)
 
-        # Update the mesh
-        bmesh.update_edit_mesh(obj.data)
+            # Update the mesh for this object
+            bmesh.update_edit_mesh(obj.data)
         
         # Report the number of overlapping vertices
-        if overlapping_verts:
-            self.report({'INFO'}, f"Highlighted {len(overlapping_verts)} overlapping vertices")
+        if total_overlaps > 0:
+            self.report({'INFO'}, f"Highlighted {total_overlaps} overlapping vertices")
         else:
             self.report({'INFO'}, "No overlapping vertices found")
         
@@ -200,7 +214,7 @@ def register():
         try:
             bpy.utils.register_class(cls)
         except:
-            print(f"{cls.__name__} already registred")
+            print(f"{cls.__name__} already registered")
 
     bpy.types.Scene.vertex_overlap = bpy.props.PointerProperty(type=VertexOverlapProperties)
     bpy.app.handlers.depsgraph_update_post.append(check_mode_change)
