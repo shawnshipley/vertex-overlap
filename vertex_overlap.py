@@ -117,7 +117,8 @@ class VertexOverlapProperties(bpy.types.PropertyGroup):
         name="Overlap Threshold",
         description="Threshold distance for overlapping vertices",
         default=0.0001,
-        min=0.0,
+        min=0.0000001,
+        soft_min=0.0000001,
         precision=4
     ) # type: ignore
     
